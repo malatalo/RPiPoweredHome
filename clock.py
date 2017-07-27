@@ -1,7 +1,34 @@
 #!/usr/bin/python3
 from samplebase import SampleBase
 import time
-import sys
+import os
+import threading
+#import flaskRest
+from flask import Flask
+from flask_restful import Resource, Api
+
+app = Flask(__name__)
+api = Api(app)
+
+
+colorRed = 255
+colorGreen = 0
+colorBlue = 0
+colorBrightness = 0.10
+waitTime = 60
+
+
+class HelloWorld(Resource):
+    def get(self):
+        return {'red': colorRed,
+                'green': colorGreen,
+                'blue': colorBlue,
+                'brightness': colorBrightness}
+
+api.add_resource(HelloWorld, '/')
+
+def startTheThing():
+    app.run(host='192.168.10.50')
 
 
 class SimpleSquare(SampleBase):
@@ -234,11 +261,14 @@ class SimpleSquare(SampleBase):
         days = [daySun, dayMon, dayTue, dayWed, dayThu, dayFri, daySat]
 
         def printNumber(number, numX, numY):
+            cRed = colorRed * colorBrightness
+            cGreen = colorGreen * colorBrightness
+            cBlue = colorBlue * colorBrightness
             vara = numX
             for row in number:
                 for char in row:
                     if char == "#":
-                        offset_canvas.SetPixel(numX, numY, 255, 0, 0)
+                        offset_canvas.SetPixel(numX, numY, cRed, cGreen, cBlue)
                     else:
                         offset_canvas.SetPixel(numX, numY, 0, 0, 0)
                     numX += 1
@@ -249,7 +279,7 @@ class SimpleSquare(SampleBase):
 
             if open("/home/sortsit/git/ledClock/txtClock.txt").read() == "stop\n":
                 print("txtStop")
-                sys.exit(0)
+                os._exit(1)
 
             hours = int(time.strftime("%H"))
             minutes = int(time.strftime("%M"))
@@ -277,18 +307,19 @@ class SimpleSquare(SampleBase):
 
             printNumber(numbersD[day1], 15, 11)
             printNumber(numbersD[day2], 19, 11)
-            # printNumber(numbersD[10],19,11)
             printNumber(numbersD[month1], 24, 11)
             printNumber(numbersD[month2], 28, 11)
-            # printNumber(numbersD[10],30,11)
 
             offset_canvas = self.matrix.SwapOnVSync(offset_canvas)
 
-            time.sleep(60)
+            time.sleep(waitTime)
 
 
 # Main function
 if __name__ == "__main__":
+    # Thread the Flask Restful
+    t = threading.Thread(target=startTheThing)
+    t.start()
     simple_square = SimpleSquare()
     if not simple_square.process():
         simple_square.print_help()
