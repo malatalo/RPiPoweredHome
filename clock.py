@@ -4,11 +4,18 @@ import time
 import os
 import threading
 from flask import Flask
-from flask_restful import Resource, Api
+from flask_restful import reqparse, Resource, Api
 
 # flask rest
 app = Flask(__name__)
 api = Api(app)
+# flask parser
+parser = reqparse.RequestParser()
+parser.add_argument('red')
+parser.add_argument('green')
+parser.add_argument('blue')
+parser.add_argument('brightness')
+parser.add_argument('waitTime')
 
 # colors for the screen
 colorRed = 255
@@ -26,6 +33,26 @@ class HelloWorld(Resource):
                 'blue': colorBlue,
                 'brightness': colorBrightness,
                 'waitTime': waitTime}
+
+    def put(self):
+        args = parser.parse_args()
+        try:
+            global colorRed
+            global colorGreen
+            global colorBlue
+            global colorBrightness
+            global waitTime
+
+            colorRed = args['red']
+            print ("red: "+colorRed)
+            colorGreen = args['green']
+            print ("green: "+colorGreen)
+            colorBlue = args['blue']
+            colorBrightness = args['brightness']
+            waitTime = args['waitTime']
+        except Exception as e:
+            print ('fail '+str(e))
+        return "success", 201
 
 api.add_resource(HelloWorld, '/')
 
