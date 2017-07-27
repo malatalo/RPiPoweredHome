@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from samplebase import SampleBase
 import time
-import os
+import sys
 import threading
 from flask import Flask
 from flask_restful import reqparse, Resource, Api
@@ -9,6 +9,7 @@ from flask_restful import reqparse, Resource, Api
 # flask rest
 app = Flask(__name__)
 api = Api(app)
+
 # flask parser
 parser = reqparse.RequestParser()
 parser.add_argument('red')
@@ -23,7 +24,7 @@ colorGreen = 0
 colorBlue = 0
 colorBrightness = 0.10
 # while loop sleep time in seconds
-waitTime = 60
+waitTime = 5
 
 # flask rest
 class HelloWorld(Resource):
@@ -59,7 +60,8 @@ api.add_resource(HelloWorld, '/')
 # starting rest
 def startRest():
     app.run(host='192.168.10.50')
-
+threadt = threading.Thread(target=startRest)
+threadt.daemon = True 
 # led screen
 class SimpleClock(SampleBase):
     def __init__(self, *args, **kwargs):
@@ -321,7 +323,7 @@ class SimpleClock(SampleBase):
             # if the .txt reads 'stop' then exit everything
             if open("/home/sortsit/git/ledClock/txtClock.txt").read() == "stop\n":
                 print("txtStop")
-                os._exit(1)
+                sys.exit(0)
 
             # get current hours and minutes
             hours = int(time.strftime("%H"))
@@ -367,8 +369,7 @@ class SimpleClock(SampleBase):
 # Main function
 if __name__ == "__main__":
     # Thread the Flask Restful
-    t = threading.Thread(target=startRest)
-    t.start()
+    threadt.start()
     # start led screen
     simple_clock = SimpleClock()
     if not simple_clock.process():
