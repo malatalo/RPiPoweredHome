@@ -1,1 +1,0 @@
-echo start | tee txtClock.txt; sudo rpi-rgb-led-matrix/python/samples/clock.py --led-brightness=10
