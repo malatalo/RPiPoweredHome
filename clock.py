@@ -44,24 +44,25 @@ class HelloWorld(Resource):
             global colorBrightness
             global waitTime
 
-            colorRed = args['red']
-            print ("red: "+colorRed)
-            colorGreen = args['green']
-            print ("green: "+colorGreen)
-            colorBlue = args['blue']
-            colorBrightness = args['brightness']
-            waitTime = args['waitTime']
+            colorRed = int(args['red'])
+            colorGreen = int(args['green'])
+            colorBlue = int(args['blue'])
+            colorBrightness = float(args['brightness'])
+            waitTime = int(args['waitTime'])
         except Exception as e:
-            print ('fail '+str(e))
-        return "success", 201
+            return "fail", 400
+        return "success", 200
 
 api.add_resource(HelloWorld, '/')
 
-# starting rest
+# for starting rest
 def startRest():
     app.run(host='192.168.10.50')
+
+# thread for flask restful and set it as daemon for easy exit
 threadt = threading.Thread(target=startRest)
 threadt.daemon = True 
+
 # led screen
 class SimpleClock(SampleBase):
     def __init__(self, *args, **kwargs):
