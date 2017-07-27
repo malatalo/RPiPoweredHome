@@ -24,7 +24,8 @@ class HelloWorld(Resource):
         return {'red': colorRed,
                 'green': colorGreen,
                 'blue': colorBlue,
-                'brightness': colorBrightness}
+                'brightness': colorBrightness,
+                'waitTime': waitTime}
 
 api.add_resource(HelloWorld, '/')
 
