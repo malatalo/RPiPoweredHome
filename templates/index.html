@@ -1,0 +1,204 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Ledz</title>
+  <meta charset="utf-8" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <style>
+    @import url(https://fonts.googleapis.com/css?family=Roboto:700);
+    body {
+      background-color: rgb(0, 0, 0);
+      text-align: center;
+      padding: 40px 0 0 0;
+    }
+
+    fieldset {
+      border: none;
+    }
+
+    output {
+      display: inline-block;
+      min-width: 2.5em;
+    }
+
+    label,
+    output,
+    #u {
+      padding: 2px 9px;
+      border-radius: 3px;
+      font-family: 'Roboto', sans-serif;
+      color: #000;
+      font-size: 1.1em;
+    }
+
+    label[for=r],
+    output[for=r] {
+      background-color: #f00;
+    }
+
+    label[for=g],
+    output[for=g] {
+      background-color: #0f0;
+    }
+
+    label[for=b],
+    output[for=b] {
+      background-color: #00f;
+    }
+
+    label[for=br],
+    output[for=br] {
+      background-color: #fff;
+    }
+
+    label[for=w],
+    output[for=w] {
+      background-color: #fff;
+    }
+  </style>
+  <script>
+    var body, r, g, b, r_out, g_out, b_out, br, w, u;
+
+    function setColor() {
+      var r_hex = parseInt(r.value, 10).toString(16),
+        g_hex = parseInt(g.value, 10).toString(16),
+        b_hex = parseInt(b.value, 10).toString(16),
+        hex = "#" + pad(r_hex) + pad(g_hex) + pad(b_hex);
+      body.style.backgroundColor = hex;
+    }
+
+    function pad(n) {
+      return (n.length < 2) ? "0" + n : n;
+    }
+
+    function addEvents() {
+
+      body = document.body
+      r = document.querySelector('#r');
+      g = document.querySelector('#g');
+      b = document.querySelector('#b');
+      r_out = document.querySelector('#r_out');
+      g_out = document.querySelector('#g_out');
+      b_out = document.querySelector('#b_out');
+      br = document.querySelector('#br');
+      w = document.querySelector('#w');
+      u = document.querySelector('#u');
+
+
+      /*r.addEventListener('change', function() {
+        setColor();
+        r_out.value = r.value;
+      }, false);*/
+
+      r.addEventListener('input', function () {
+        setColor();
+        r_out.value = r.value;
+      }, false);
+
+      /*g.addEventListener('change', function() {
+        setColor();
+        g_out.value = g.value;
+      }, false);*/
+
+      g.addEventListener('input', function () {
+        setColor();
+        g_out.value = g.value;
+      }, false);
+
+      /*b.addEventListener('change', function() {
+        setColor();
+        b_out.value = b.value;
+      }, false);*/
+
+      b.addEventListener('input', function () {
+        setColor();
+        b_out.value = b.value;
+      }, false);
+
+      br.addEventListener('input', function () {
+        br_out.value = parseFloat(br.value).toFixed(2)
+      }, false);
+
+      w.addEventListener('input', function () {
+        w_out.value = w.value
+      }, false);
+
+      u.addEventListener("click", setClock);
+
+    }
+
+    function startYourEngines() {
+      addEvents();
+      setColor();
+    }
+
+    function setClock() {
+
+      var urli = "http://192.168.10.50:5000/api"
+      $.ajax({
+        url: urli,
+        data: {
+          'red': r.value,
+          'green': g.value,
+          'blue': b.value,
+          'brightness': br.value,
+          'waitTime': w.value
+        },
+        type: 'PUT',
+        success: function (response) {
+          console.log(response);
+        },
+        error: function (error) {
+          console.log(error);
+        }
+      });
+
+    }
+
+    document.addEventListener('DOMContentLoaded', startYourEngines, false);
+  </script>
+</head>
+
+<body>
+  <fieldset>
+    <label for="r">R</label>
+    <input type="range" min="0" max="255" id="r" step="1" value="255">
+    <output for="r" id="r_out">255</output>
+  </fieldset>
+
+  <fieldset>
+    <label for="g">G</label>
+    <input type="range" min="0" max="255" id="g" step="1" value="0">
+    <output for="g" id="g_out">0</output>
+  </fieldset>
+
+  <fieldset>
+    <label for="b">B</label>
+    <input type="range" min="0" max="255" id="b" step="1" value="0">
+    <output for="b" id="b_out">0</output>
+  </fieldset>
+
+  <br><br>
+
+  <fieldset>
+    <label for="br">B</label>
+    <input type="range" min="0.05" max="1" id="br" step="0.05" value="0.10">
+    <output for="br" id="br_out">0.1</output>
+  </fieldset>
+
+  <fieldset>
+    <label for="w">W</label>
+    <input type="range" min="1" max="60" id="w" step="1" value="60">
+    <output for="w" id="w_out">60</output>
+  </fieldset>
+
+  <br><br>
+
+  <fieldset>
+    <input type="button" id="u" value="Set clock">
+  </fieldset>
+
+</body>
+
+</html>

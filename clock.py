@@ -3,7 +3,7 @@ from samplebase import SampleBase
 import time
 import sys
 import threading
-from flask import Flask
+from flask import Flask, render_template, Response
 from flask_restful import reqparse, Resource, Api
 
 # flask rest
@@ -53,7 +53,12 @@ class HelloWorld(Resource):
             return "fail", 400
         return "success", 200
 
-api.add_resource(HelloWorld, '/')
+class HelloHTML(Resource):
+    def get(self):
+        return Response(render_template('index.html'),mimetype='text/html')
+
+api.add_resource(HelloWorld, '/api')
+api.add_resource(HelloHTML, '/')
 
 # for starting rest
 def startRest():
