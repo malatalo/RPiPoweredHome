@@ -360,10 +360,10 @@ class SimpleClock(SampleBase):
             day1 = int(day / 10)
             day2 = day - (day1 * 10)
 
-            printNumber(numbersD[day1], 15, 11)
-            printNumber(numbersD[day2], 19, 11)
-            printNumber(numbersD[month1], 24, 11)
-            printNumber(numbersD[month2], 28, 11)
+            printNumber(numbersD[day1], 16, 11)
+            printNumber(numbersD[day2], 20, 11)
+            printNumber(numbersD[month1], 25, 11)
+            printNumber(numbersD[month2], 29, 11)
 
             # update led screen
             offset_canvas = self.matrix.SwapOnVSync(offset_canvas)
