@@ -26,6 +26,7 @@ colorBrightness = 0.10
 # while loop sleep time in seconds
 waitTime = 5
 
+
 # flask rest
 class HelloWorld(Resource):
     def get(self):
@@ -53,20 +54,25 @@ class HelloWorld(Resource):
             return "fail", 400
         return "success", 200
 
+
 class HelloHTML(Resource):
     def get(self):
-        return Response(render_template('index.html'),mimetype='text/html')
+        return Response(render_template('index.html'), mimetype='text/html')
+
 
 api.add_resource(HelloWorld, '/api')
 api.add_resource(HelloHTML, '/')
+
 
 # for starting rest
 def startRest():
     app.run(host='192.168.10.50')
 
+
 # thread for flask restful and set it as daemon for easy exit
 threadt = threading.Thread(target=startRest)
-threadt.daemon = True 
+threadt.daemon = True
+
 
 # led screen
 class SimpleClock(SampleBase):
@@ -188,7 +194,7 @@ class SimpleClock(SampleBase):
             "    ",
             "    "]
         numbers = [number0, number1, number2, number3, number4,
-                   number5, number6, number7, number8, number9,numberd]
+                   number5, number6, number7, number8, number9, numberd]
 
         # define 'font' for date
         numberD0 = [
@@ -301,7 +307,7 @@ class SimpleClock(SampleBase):
             "###    ## "]
         days = [daySun, dayMon, dayTue, dayWed, dayThu, dayFri, daySat]
 
-        # prints given number or text (defined above) at given X and Y coordinates
+        # prints given number or text at given X and Y coordinates
         def printNumber(number, numX, numY):
             # calculate colors
             cRed = colorRed * colorBrightness
@@ -313,14 +319,15 @@ class SimpleClock(SampleBase):
             for row in number:
                 # loop through characters in each row
                 for char in row:
-                    # if character is '#' print that pixel with calculated colors, if not paint it black
+                    # if character is '#' print that pixel with calculated
+                    # colors, if not paint it black
                     if char == "#":
                         offset_canvas.SetPixel(numX, numY, cRed, cGreen, cBlue)
                     else:
                         offset_canvas.SetPixel(numX, numY, 0, 0, 0)
                     # advance one pixel to the right after each char
                     numX += 1
-                # advance one pixel down and return to the starting X coordinate
+                # advance one pixel down and return to the start X coordinate
                 numY += 1
                 numX = vara
 
@@ -352,7 +359,7 @@ class SimpleClock(SampleBase):
             weekDay = int(time.strftime("%w"))
             printNumber(days[weekDay], 0, 11)
 
-            # get current day and month and print them the same way as hours and minutes
+            # get current day and month and print them
             month = int(time.strftime("%m"))
             day = int(time.strftime("%d"))
             month1 = int(month / 10)
