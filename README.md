@@ -1,3 +1,4 @@
-https://github.com/hzeller/rpi-rgb-led-matrix
+Using Python and Flask restful api to control a led screen and store sensor data.
 
-Using Flask restful api to control Adafruit's 16x32 led screen. Displaying a clock.
+Led screen is Adafruit's 16x32 led screen. 
+Using https://github.com/hzeller/rpi-rgb-led-matrix
