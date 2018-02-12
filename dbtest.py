@@ -31,8 +31,10 @@ class HelloDBWorld(Resource):
             temp = str(args['temp'])
             conn = psycopg2.connect("dbname=sensordb user=mialatal")
             cur = conn.cursor()
-            cur.execute("INSERT INTO temperatures(time, temp) \
-                        VALUES(%s,%s);", (time, temp))
+            print(cur.mogrify("INSERT INTO temperatures(time, temp) \
+                        VALUES(%s,%s);", (time, temp)))
+            # cur.execute("INSERT INTO temperatures(time, temp) \
+            #            VALUES(%s,%s);", (time, temp))
             cur.close()
             conn.close()
         except Exception as e:
